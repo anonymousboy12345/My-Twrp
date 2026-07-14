@@ -28,8 +28,9 @@ jobs:
 
     - name: Setup Secure Fixed Repo Tool Launcher
       run: |
-        mkdir ~/bin
-        curl https://googleapis.com > ~/bin/repo
+        mkdir -p ~/bin
+        # Switched to the official raw GitHub mirror to prevent Google Cloud server block/redirection bugs
+        curl -s https://githubusercontent.com > ~/bin/repo
         chmod a+x ~/bin/repo
         echo "PATH=$HOME/bin:$PATH" >> $GITHUB_ENV
 
