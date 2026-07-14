@@ -28,31 +28,27 @@ jobs:
 
     - name: Setup Secure Fixed Repo Tool Launcher
       run: |
-        mkdir -p ~/bin
-        # Corrected full raw domain pointer path to resolve the DNS exit code 6 block
-        curl -s https://githubusercontent.com > ~/bin/repo
-        chmod a+x ~/bin/repo
-        echo "PATH=$HOME/bin:$PATH" >> $GITHUB_ENV
+        mkdir -p /home/runner/bin
+        curl -s https://githubusercontent.com > /home/runner/bin/repo
+        chmod a+x /home/runner/bin/repo
+        echo "PATH=/home/runner/bin:$PATH" >> $GITHUB_ENV
 
     - name: Sync TWRP Minimal Source Tree
       run: |
-        mkdir ~/twrp
-        cd ~/twrp
+        mkdir -p /home/runner/twrp
+        cd /home/runner/twrp
         git config --global user.name "Builder"
         git config --global user.email "builder@twrp.com"
-        
-        # Flawlessly hardcoded core baseline mapping paths to bypass any redirection bugs
-        ~/bin/repo init --depth=1 --no-repo-verify -u https://github.com -b twrp-12.1
-        ~/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+        /home/runner/bin/repo init --depth=1 --no-repo-verify -u https://github.com -b twrp-12.1
+        /home/runner/bin/repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 
     - name: Clone Custom Target Device Tree
       run: |
-        # Manually pulls from your single custom user input field down below
-        git clone ${{ github.event.inputs.device_tree_url }} ~/twrp/device/herofun/BH502G
+        git clone ${{ github.event.inputs.device_tree_url }} /home/runner/twrp/device/herofun/BH502G
 
     - name: Compile Unofficial Custom Recovery
       run: |
-        cd ~/twrp
+        cd /home/runner/twrp
         export ALLOW_MISSING_DEPENDENCIES=true
         source build/envsetup.sh
         lunch omni_BH502G-userdebug
