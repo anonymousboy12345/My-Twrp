@@ -53,4 +53,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: TWRP-UnrootedRescue-BH502G
-        path: /home/runner/twrp/out/target/product/BH502G/boot.img
+        # Fixed path using wildcard mapping to safely catch the image wherever it builds
+        path: /home/runner/twrp/out/target/product/BH502G/*.img
